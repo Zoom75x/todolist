@@ -1,6 +1,6 @@
 import './App.css'
-import {Rating} from "./assets/feature/rating/Rating.tsx";
-import {Counter} from "./assets/feature/counter";
+import {Rating} from "./feature/rating/Rating.tsx";
+import {Counter} from "./feature/counter";
 
 
 export const App = () => {
