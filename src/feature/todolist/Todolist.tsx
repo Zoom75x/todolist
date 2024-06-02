@@ -13,7 +13,6 @@ export interface Task {
 }
 
 export const Todolist = ({title, tasks, setFilterState}: Props) => {
-    console.log(tasks)
     return (
         <>
             <div>{title}</div>
