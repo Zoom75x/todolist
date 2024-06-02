@@ -14,7 +14,7 @@ export const Rating = () => {
 }
     return (
         <ul>
-            {getStar(5).map(el => <Star isSelected={rating>el} onClick={onClick} id={(el+1) as RatingType}/>)}
+            {getStar(5).map((el, index) => <Star key={index} isSelected={rating>el} onClick={onClick} id={(el+1) as RatingType}/>)}
         </ul>
     )
             }
