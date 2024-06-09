@@ -1,6 +1,6 @@
 import {filterStateType} from "../../TodoLists.tsx";
 import {v4 as uuidv4} from "uuid"
-import {useState} from "react";
+import {ChangeEvent, useState, KeyboardEvent} from "react";
 import css from "./TodoList.module.css"
 
 export interface TasksType {
@@ -14,16 +14,17 @@ export interface PropsType {
     tasks: TasksType[]
     setFilterState: (filterState: filterStateType) => void
     filterState: filterStateType
-    setTasks: (tasks:TasksType[])=> void
+    setTasks: (tasks: TasksType[]) => void
 }
-const setColor =(filterState: filterStateType, state: filterStateType) => {
-            return {background: filterState === state ? "red" : ""}
+
+const setColor = (filterState: filterStateType, state: filterStateType) => {
+    return {background: filterState === state ? "red" : ""}
 }
 
 export const TodoList = ({titleToDoList, tasks, setFilterState, filterState, setTasks}: PropsType) => {
     const [value, setValue] = useState<string>("")
     const [error, setError] = useState<string>("")
-    const addTask =() => {
+    const addTask = () => {
         if (value) {
             const newArrTask = [...tasks]
             newArrTask.push({id: uuidv4(), titleTask: value, isDone: false})
@@ -33,14 +34,30 @@ export const TodoList = ({titleToDoList, tasks, setFilterState, filterState, set
             setError(true)
         }
     }
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setValue(e.currentTarget.value.trim())
+    }
+    const onFocus = () => {
+        if (error) {
+            setError(false)
+        }
+    }
+    const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.code === "Enter") {
+            addTask()
+        } else (event.code === "Escape")
+        {
+            setValue("")
+        }
+    }
     return (
         <>
             <div><h3>{titleToDoList}</h3></div>
-            <input className={error? css.error : undefined} type={"text"} value={value} onChange={(e)=>{
-                if (error) {
-                    setError(false)
-                }
-                setValue(e.currentTarget.value)}}/>
+            <input className={error ? css.error : undefined}
+                   type={"text"} value={value}
+                   onChange={onChange}
+                   onFocus={onFocus}
+                   onKeyUp={onKeyUp}/>
             <button onClick={addTask}>Add task</button>
             <ul>
                 {tasks.map(({id, titleTask, isDone}) => (
@@ -48,11 +65,11 @@ export const TodoList = ({titleToDoList, tasks, setFilterState, filterState, set
                     <li key={id}><input type={"checkbox"} checked={isDone}/>{titleTask}</li>))}
             </ul>
             <div>
-                <button style={setColor (filterState, "All")} onClick={() => {
+                <button style={setColor(filterState, "All")} onClick={() => {
                     setFilterState('All')
                 }}>All
                 </button>
-                <button style={setColor( filterState, "Active")}
+                <button style={setColor(filterState, "Active")}
                         onClick={() => setFilterState("Active")}>Active
                 </button>
                 <button style={setColor(filterState, "Completed")}
