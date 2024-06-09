@@ -4,7 +4,7 @@ import {ChangeEvent, useState, KeyboardEvent} from "react";
 import css from "./TodoList.module.css"
 
 export interface TasksType {
-    id: number
+    id: string
     titleTask: string
     isDone: boolean
 }
@@ -31,38 +31,38 @@ export const TodoList = ({titleToDoList, tasks, setFilterState, filterState, set
             setTasks(newArrTask)
             setValue("")
         } else {
-            setError(true)
+            setError("")
         }
     }
     const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+        console.log(value, e.currentTarget.value)
         setValue(e.currentTarget.value.trim())
     }
     const onFocus = () => {
         if (error) {
-            setError(false)
+            setError("")
         }
     }
     const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.code === "Enter") {
             addTask()
-        } else (event.code === "Escape")
-        {
+        } else if (event.code === "Escape") {
             setValue("")
         }
     }
     const onDeleteTask = (id: string) => {
         const newArr = [...tasks]
-        const filteredTasks = newArr.filter(task=> task.id !== id)
+        const filteredTasks = newArr.filter(task => task.id !== id)
         setTasks(filteredTasks)
     }
-    const onChangeCheckBox = (el:ChangeEvent<HTMLInputElement>, id:string) =>{
-            const newArray = [...tasks]
-            const changeTask = newArray.find(task => task.id === id)
-            if (changeTask) {
-                changeTask.isDone=el.target.checked
-                const newTasks = newArray.map(el =>task.id==id? changeTask:el)
-                setTasks(newTasks)
-            }
+    const onChangeCheckBox = (event: ChangeEvent<HTMLInputElement>, id: string) => {
+        const newArray = [...tasks]
+        const changeTask = newArray.find(task => task.id === id)
+        if (changeTask) {
+            changeTask.isDone = event.target.checked
+            const newTasks = newArray.map(task => task.id == id ? changeTask : task)
+            setTasks(newTasks)
+        }
     }
     return (
         <>
@@ -76,12 +76,12 @@ export const TodoList = ({titleToDoList, tasks, setFilterState, filterState, set
             <ul className={css.tasks}>
                 {tasks.map(({id, titleTask, isDone}) => (
                     /*const{id, titleTask, isDone} = el*/
-                    <li key={id} className={isDone ? css.isDone: ""}>
+                    <li key={id} className={isDone ? css.isDone : ""}>
                         <input type={"checkbox"}
                                checked={isDone}
-                               onChange={(event) => onChangeCheckBox(event,id)}/>{titleTask}
+                               onChange={(event) => onChangeCheckBox(event, id)}/>{titleTask}
                         <button>Edit</button>
-                        <button onClick={()=> onDeleteTask(id)}>Delete</button>
+                        <button onClick={() => onDeleteTask(id)}>Delete</button>
                     </li>))}
             </ul>
             <div>
