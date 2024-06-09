@@ -1,0 +1,21 @@
+.error {
+    border: 3px solid red;
+}
+.tasks {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+.isDone {
+    position: relative;
+    display: inline-block;
+}
+.isDone:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #1a1a1a;
+    left: 0;
+    top: 50%;
+}
