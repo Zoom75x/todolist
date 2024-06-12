@@ -10,26 +10,16 @@ const initialTask: TasksType[] = [
     {id: uuidv4(), titleTask: "Яйца", isDone: true},     /*это одна task в массиве*/
     {id: uuidv4(), titleTask: "Овощи", isDone: false}    /*это одна task в массиве*/
 ]
-export type filterStateType = "All" | "Active" | "Completed"
+
+
 export const TodoLists = () => {
     const [tasks, setTasks] = useState<TasksType[]>(initialTask)
-    const [filterState, setFilterState] = useState<filterStateType>("All")
-    let filterTask: TasksType[] = []
 
-    if (filterState === "All") {
-        filterTask = tasks
-    } else if (filterState === "Active") {
-        filterTask = tasks.filter((task) => !task.isDone)
-    } else if (filterState === "Completed") {
-        filterTask = tasks.filter((task) => task.isDone)
-    }
     return (
         <>
             <TodoList
                 titleToDoList={"Список продуктов"}
-                tasks={filterTask}
-                setFilterState={setFilterState}
-                filterState={filterState}
+                tasks={tasks}
                 setTasks={setTasks}/>
         </>
     )

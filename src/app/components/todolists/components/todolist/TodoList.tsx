@@ -1,101 +1,38 @@
-import {filterStateType} from "../../TodoLists.tsx";
-import {v4 as uuidv4} from "uuid"
-import {ChangeEvent, useState, KeyboardEvent} from "react";
-import css from "./TodoList.module.css"
+import {FilterBlock, filterStateType} from "../filterBlock/FilterBlock.tsx";
+import {AddTask} from "../addTask/AddTask.tsx";
+import {TasksList} from "../tasksList/TasksList.tsx";
+import {useState} from "react";
 
 export interface TasksType {
     id: string
     titleTask: string
     isDone: boolean
 }
-
-export interface PropsType {
+interface PropsType {
     titleToDoList: string
     tasks: TasksType[]
-    setFilterState: (filterState: filterStateType) => void
-    filterState: filterStateType
     setTasks: (tasks: TasksType[]) => void
-}
 
-const setColor = (filterState: filterStateType, state: filterStateType) => {
-    return {background: filterState === state ? "red" : ""}
 }
+export const TodoList = ({titleToDoList, tasks, setTasks}: PropsType) => {
+    const [filterState, setFilterState] = useState<filterStateType>("All")
 
-export const TodoList = ({titleToDoList, tasks, setFilterState, filterState, setTasks}: PropsType) => {
-    const [value, setValue] = useState<string>("")
-    const [error, setError] = useState<string>("")
-    const addTask = () => {
-        if (value) {
-            const newArrTask = [...tasks]
-            newArrTask.push({id: uuidv4(), titleTask: value, isDone: false})
-            setTasks(newArrTask)
-            setValue("")
-        } else {
-            setError("")
-        }
-    }
-    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log(value, e.currentTarget.value)
-        setValue(e.currentTarget.value.trim())
-    }
-    const onFocus = () => {
-        if (error) {
-            setError("")
-        }
-    }
-    const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
-        if (event.code === "Enter") {
-            addTask()
-        } else if (event.code === "Escape") {
-            setValue("")
-        }
-    }
-    const onDeleteTask = (id: string) => {
-        const newArr = [...tasks]
-        const filteredTasks = newArr.filter(task => task.id !== id)
-        setTasks(filteredTasks)
-    }
-    const onChangeCheckBox = (event: ChangeEvent<HTMLInputElement>, id: string) => {
-        const newArray = [...tasks]
-        const changeTask = newArray.find(task => task.id === id)
-        if (changeTask) {
-            changeTask.isDone = event.target.checked
-            const newTasks = newArray.map(task => task.id == id ? changeTask : task)
-            setTasks(newTasks)
-        }
+    let filterTask:TasksType[]=[];
+    if (filterState === "All") {
+        filterTask = tasks
+    } else if (filterState === "Active") {
+        filterTask = tasks.filter((task) => !task.isDone)
+    } else if (filterState === "Completed") {
+        filterTask = tasks.filter((task) => task.isDone)
     }
     return (
         <>
             <div><h3>{titleToDoList}</h3></div>
-            <input className={error ? css.error : undefined}
-                   type={"text"} value={value}
-                   onChange={onChange}
-                   onFocus={onFocus}
-                   onKeyUp={onKeyUp}/>
-            <button onClick={addTask}>Add task</button>
-            <ul className={css.tasks}>
-                {tasks.map(({id, titleTask, isDone}) => (
-                    /*const{id, titleTask, isDone} = el*/
-                    <li key={id} className={isDone ? css.isDone : ""}>
-                        <input type={"checkbox"}
-                               checked={isDone}
-                               onChange={(event) => onChangeCheckBox(event, id)}/>{titleTask}
-                        <button>Edit</button>
-                        <button onClick={() => onDeleteTask(id)}>Delete</button>
-                    </li>))}
-            </ul>
-            <div>
-                <button style={setColor(filterState, "All")} onClick={() => {
-                    setFilterState('All')
-                }}>All
-                </button>
-                <button style={setColor(filterState, "Active")}
-                        onClick={() => setFilterState("Active")}>Active
-                </button>
-                <button style={setColor(filterState, "Completed")}
-                        onClick={() => setFilterState("Completed")}>Completed
-                </button>
-            </div>
+            <AddTask tasks={tasks} setTasks={setTasks}/>
+            <TasksList setTasks={setTasks} tasks={tasks} filteredTasks={filterTask}/>
+            <FilterBlock
+                filterState={filterState}
+                setFilterState={setFilterState}/>
         </>
     )
 }
