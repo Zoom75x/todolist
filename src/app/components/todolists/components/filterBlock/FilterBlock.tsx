@@ -1,11 +1,10 @@
+import {FilterStateType} from "../todolist/TodoList.tsx"
 export interface PropsType {
-    filterState: filterStateType
-    setFilterState: (filterState: filterStateType) => void
+    filterState: FilterStateType
+    setFilterState: (filterState: FilterStateType) => void
 }
 
-export type filterStateType = "All" | "Active" | "Completed"
-
-const setColor = (filterState: filterStateType, state: filterStateType) => {
+const setColor = (filterState: FilterStateType, state: FilterStateType) => {
     return {background: filterState === state ? "red" : ""}
 }
 export const FilterBlock = ({filterState, setFilterState}: PropsType) => {
