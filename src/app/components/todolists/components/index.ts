@@ -1,1 +1,2 @@
-export {TodoList} from "./todolist/TodoList.jsx"
+export {TodoList} from "./todolist/TodoList.tsx"
+export {ChangeTitle} from "./changeTitle/ChangeTitle.tsx"
