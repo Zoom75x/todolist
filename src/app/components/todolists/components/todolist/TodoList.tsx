@@ -17,12 +17,12 @@ interface PropsType {
     tasks: Task[]
     setTasks: Dispatch<SetStateAction<TodoListType[]>>
     todoListId: string
+    setTodolists: Dispatch<SetStateAction<TodoListType[]>>
 }
 
 export type FilterStateType = "All" | "Active" | "Completed"
-export const TodoList = ({tasks, titleToDoList, setTasks, todoListId}: PropsType) => {
+export const TodoList = ({tasks, titleToDoList, setTasks, todoListId, setTodolists}: PropsType) => {
     const [filterState, setFilterState] = useState<FilterStateType>("All")
-
     let filterTask: Task[] = [];
 
     if (filterState === "All") {
@@ -34,9 +34,12 @@ export const TodoList = ({tasks, titleToDoList, setTasks, todoListId}: PropsType
     }
     return <>
         <div><h3>{titleToDoList}</h3></div>
-        <ChangeTitle title={titleToDoList}/>
+        <ChangeTitle
+            title={titleToDoList}
+            todoListId={todoListId}
+            setTodolists={setTodolists}/>
         <AddTask tasks={filterTask} setTasks={setTasks} todoListId={todoListId}/>
-        <TasksList setTasks={setTasks} filteredTask={filterTask} todoListId={todoListId}/>
+        <TasksList setTasks={setTasks} filteredTasks={tasks} todoListId={todoListId}/>
         <FilterBlock filterState={filterState} setFilterState={setFilterState}/>
     </>
 }
