@@ -2,6 +2,7 @@ import {TodoList} from "./components"
 import {Task} from "./components/todolist/TodoList.tsx";
 import {useState} from "react";
 import {v4 as uuidv4} from "uuid"
+import {AddTodolist} from "./addTodolist/AddTodolist.tsx";
 
 export interface TodoListType {
     id: string
@@ -36,7 +37,9 @@ export const TodoLists = () => {
     const [todoLists, setTodolists] = useState<TodoListType[]>(initialTodoLists)
     const [tasks, setTasks] = useState<TaskType>(initialTasks)
 
+
     return <>
+        <AddTodolist setTodolists={setTodolists} setTasks={setTasks}/>
         {todoLists.map((todolist) => {
             return (
                 <TodoList

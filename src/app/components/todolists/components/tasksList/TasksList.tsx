@@ -36,7 +36,7 @@ export const TasksList = ({setTasks, todolistId, filteredTasks}: PropsType) => {
     }
     return (
         <ul className={css.tasks}>
-            {filteredTasks.map(({id, titleTask, isDone}) => (  /*const{id, titleTask, isDone} = el*/
+            {filteredTasks.map(({id, titleTask, isDone}) => (
                 <li key={id} className={isDone ? css.isDone : ""}>
                     <input type={"checkbox"}
                            checked={isDone}
