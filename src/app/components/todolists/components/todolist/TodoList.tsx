@@ -34,7 +34,7 @@ export const TodoList = ({tasks, titleToDoList, setTasks, todoListId}: PropsType
     }
     return <>
         <div><h3>{titleToDoList}</h3></div>
-        <ChangeTitle title={title}/>
+        <ChangeTitle title={titleToDoList}/>
         <AddTask tasks={filterTask} setTasks={setTasks} todoListId={todoListId}/>
         <TasksList setTasks={setTasks} filteredTask={filterTask} todoListId={todoListId}/>
         <FilterBlock filterState={filterState} setFilterState={setFilterState}/>
