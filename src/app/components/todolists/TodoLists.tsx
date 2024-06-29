@@ -47,7 +47,8 @@ export const TodoLists = () => {
                     title={todolist.title}
                     tasks={tasks[todolist.id]}
                     setTasks={setTasks}
-                    ToDoListId={todolist.id}
+                    todoListId={todolist.id}
+                    setTodolists={setTodolists}
                 />)
         })}
     </>
