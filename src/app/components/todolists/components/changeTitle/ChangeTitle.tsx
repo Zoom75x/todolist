@@ -5,9 +5,10 @@ import css from './ChangeTitle.module.css'
 export interface PropsType {
   title: string
   saveTitle: (value: string, callback: () => void) => void
+  disabled?: boolean
 }
 
-export const ChangeTitle = ({ title, saveTitle }: PropsType) => {
+export const ChangeTitle = ({ title, saveTitle, disabled }: PropsType) => {
   const [titleIsVisible, setTitleIsVisible] = useState<boolean>(true)
   const [value, setValue] = useState<string>(title)
 
@@ -20,14 +21,15 @@ export const ChangeTitle = ({ title, saveTitle }: PropsType) => {
   return (
     <div>
       {titleIsVisible ? (
-        <div>
-          <div className={css.container}>{title}</div>
+        <div className={css.container}>
+          <div className={css.title}>{title}</div>
           <BaseButton
             onClick={() => {
               setTitleIsVisible(false)
             }}
+            disabled={disabled}
           >
-            change Title
+            Change
           </BaseButton>
         </div>
       ) : (

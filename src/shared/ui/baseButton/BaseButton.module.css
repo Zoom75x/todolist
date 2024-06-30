@@ -7,6 +7,9 @@
     opacity: 0.8;
   }
 }
+.button:disabled {
+  background: var(--grey);
+}
 .primary {
   background: var(--primary-color);
 }

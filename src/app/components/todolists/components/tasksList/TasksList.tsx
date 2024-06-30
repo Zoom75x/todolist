@@ -3,36 +3,28 @@ import { Task } from '../todolist/TodoList.tsx'
 import { ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { TaskType } from '../../TodoLists.tsx'
 import { ChangeTitle } from '../changeTitle/ChangeTitle.tsx'
-import { BaseButton } from '../../../../../shared'
+import { BaseButton, BaseCheckbox } from '../../../../../shared'
 
 export interface PropsType {
   filteredTasks: Task[]
   setTasks: Dispatch<SetStateAction<TaskType>>
   todolistId: string
+  disabled?: boolean
 }
-
-export const TasksList = ({ setTasks, todolistId, filteredTasks }: PropsType) => {
+export const TasksList = ({ setTasks, todolistId, filteredTasks, disabled }: PropsType) => {
   const onDeleteTask = (id: string) => {
     setTasks((prevState) => {
       const targetTodolist = prevState[todolistId]
-      //console.log("Таски искомого Тудулиста", todolistId, targetTodolist)
-
       const filteredTask = targetTodolist.filter((el) => el.id !== id)
-      //console.log("Отфильтрованные таски(удалили ту, по которой кликнули)", filteredTask)
-
-      //console.log("Готовый объект с тасками", {...prevState, ...{[todolistId]: filteredTask}})
       return { ...prevState, ...{ [todolistId]: filteredTask } }
     })
   }
   const onChangeCheckBox = (event: ChangeEvent<HTMLInputElement>, id: string) => {
     setTasks((prevState) => {
       const tasks = prevState[todolistId]
-      console.log('task', tasks)
-      console.log(todolistId, 'todolistId')
       const resultTasks = tasks.map((task) =>
         task.id === id ? { ...task, isDone: event.target.checked } : task
       )
-      console.log(resultTasks, 'resultTasks')
       const resObj = {
         [todolistId]: resultTasks,
       }
@@ -42,7 +34,9 @@ export const TasksList = ({ setTasks, todolistId, filteredTasks }: PropsType) =>
   const onSaveTitleTask = (id: string, value: string, succsessCallback: () => void) => {
     setTasks((prevState) => {
       const tasks: Task[] = prevState[todolistId]
-      const newTasks = tasks.map((item) => (item.id === id ? { ...item, Task: value } : item))
+      const newTasks: Task[] = tasks.map((item) =>
+        item.id === id ? { ...item, titleTask: value } : item
+      )
       return { ...prevState, ...{ [todolistId]: newTasks } }
     })
     succsessCallback()
@@ -52,16 +46,18 @@ export const TasksList = ({ setTasks, todolistId, filteredTasks }: PropsType) =>
       {filteredTasks.map((task) => (
         <li key={task.id} className={task.isDone ? css.isDone : undefined}>
           <div className={css.container}>
-            <input
-              type={'checkbox'}
+            <BaseCheckbox
               checked={task.isDone}
               onChange={(event) => onChangeCheckBox(event, task.id)}
             />
             <ChangeTitle
               title={task.titleTask}
               saveTitle={(value, callback) => onSaveTitleTask(task.id, value, callback)}
+              disabled={task.isDone}
             />
-            <BaseButton onClick={() => onDeleteTask(task.id)}>Delete</BaseButton>
+            <BaseButton onClick={() => onDeleteTask(task.id)} disabled={task.isDone}>
+              Delete
+            </BaseButton>
           </div>
         </li>
       ))}
