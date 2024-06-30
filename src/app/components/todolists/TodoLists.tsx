@@ -46,13 +46,13 @@ export const TodoLists = () => {
                 return (
                     <TodoList
                         key={todolist.id}
-                        title={todolist.title}
+                        titleToDoList={todolist.title}
                         tasks={tasks[todolist.id]}
                         setTasks={setTasks}
-                        todoListId={todolist.id}
+                        todolistId={todolist.id}
                         setTodolists={setTodolists}
                     />)
             })}
-            <div/>
         </div>
-        }
+    </div>
+}

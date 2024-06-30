@@ -2,7 +2,7 @@ import {FilterBlock} from "../filterBlock/FilterBlock.tsx";
 import {AddTask} from "../addTask/AddTask.tsx";
 import {TasksList} from "../tasksList/TasksList.tsx";
 import {Dispatch, SetStateAction, useState} from "react";
-import {TodoListType} from "../../TodoLists.tsx";
+import {TodoListType, TaskType} from "../../TodoLists.tsx";
 import {ChangeTitle} from "../changeTitle/ChangeTitle.tsx";
 import css from "./TodoList.module.css"
 export interface Task {
@@ -15,13 +15,13 @@ export interface Task {
 interface PropsType {
     titleToDoList: string
     tasks: Task[]
-    setTasks: Dispatch<SetStateAction<TodoListType[]>>
-    todoListId: string
+    setTasks: Dispatch<SetStateAction<TaskType>>
+    todolistId: string
     setTodolists: Dispatch<SetStateAction<TodoListType[]>>
 }
 
 export type FilterStateType = "All" | "Active" | "Completed"
-export const TodoList = ({tasks, titleToDoList, setTasks, todoListId, setTodolists}: PropsType) => {
+export const TodoList = ({tasks, titleToDoList, setTasks, todolistId, setTodolists}: PropsType) => {
     const [filterState, setFilterState] = useState<FilterStateType>("All")
     let filterTask: Task[] = [];
 
@@ -34,8 +34,7 @@ export const TodoList = ({tasks, titleToDoList, setTasks, todoListId, setTodolis
     }
     const onSaveTitleTdl = (value: string, onSuccessCallback: () => void) => {
         setTodolists(prevState => {
-            const newArr = prevState.map((tdl) => tdl.id === todoListId ? {...tdl, title: value} : tdl)
-
+            const newArr = prevState.map((tdl) => tdl.id === todolistId ? {...tdl, title: value} : tdl)
             return newArr
         })
         onSuccessCallback()
@@ -46,8 +45,8 @@ export const TodoList = ({tasks, titleToDoList, setTasks, todoListId, setTodolis
             title={titleToDoList}
             saveTitle={onSaveTitleTdl}
         />
-        <AddTask tasks={filterTask} setTasks={setTasks} todoListId={todoListId}/>
-        <TasksList setTasks={setTasks} filteredTasks={tasks} todoListId={todoListId}/>
+        <AddTask tasks={filterTask} setTasks={setTasks} todoListId={todolistId}/>
+        <TasksList setTasks={setTasks} filteredTasks={filterTask} todolistId={todolistId}/>
         <FilterBlock filterState={filterState} setFilterState={setFilterState}/>
     </div>
 }

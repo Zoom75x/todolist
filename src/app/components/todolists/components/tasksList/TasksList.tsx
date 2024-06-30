@@ -1,13 +1,13 @@
 import css from "./TaskList.module.css";
 import {Task} from "../todolist/TodoList.tsx";
 import {ChangeEvent, Dispatch, SetStateAction} from "react";
-import {TodoListType, TaskType} from "../../TodoLists.tsx";
+import {TaskType} from "../../TodoLists.tsx";
 import {ChangeTitle} from "../changeTitle/ChangeTitle.tsx";
 import {BaseButton} from "../../../../../shared";
 
 export interface PropsType {
     filteredTasks: Task[]
-    setTasks: Dispatch<SetStateAction<TodoListType[]>>
+    setTasks: Dispatch<SetStateAction<TaskType>>
     todolistId: string
 }
 
@@ -27,35 +27,38 @@ export const TasksList = ({setTasks, todolistId, filteredTasks}: PropsType) => {
     const onChangeCheckBox = (event: ChangeEvent<HTMLInputElement>, id: string) => {
         setTasks(prevState => {
             const tasks = prevState[todolistId]
-            const resultTasks = tasks.map((task) => task.id === id ? {...task, isDone: el.target.checked} : task)
+            console.log("task", tasks)
+            console.log(todolistId, "todolistId")
+            const resultTasks = tasks.map((task) => task.id === id ? {...task, isDone: event.target.checked} : task)
+            console.log(resultTasks, "resultTasks")
             const resObj = {
                 [todolistId]: resultTasks
             }
             return {...prevState, ...resObj}
         })
     }
-    const onSaveTitleTask = (id:string, value: string, succsessCallbak: () => void) => {
+    const onSaveTitleTask = (id: string, value: string, succsessCallback: () => void) => {
         setTasks((prevState) => {
-            const tasks:Task[] = prevState[todolistId]
-            const newTasks= tasks.map(item => item.id===id?{...item,Task:value}:item)
-            return {...prevState, ...{ [todolistId]:newTasks}}
+            const tasks: Task[] = prevState[todolistId]
+            const newTasks = tasks.map(item => item.id === id ? {...item, Task: value} : item)
+            return {...prevState, ...{[todolistId]: newTasks}}
         })
-        succsessCallbak()
+        succsessCallback()
     }
     return (
         <ul className={css.tasks}>
             {filteredTasks.map((task) => (
                 <li key={task.id} className={task.isDone ? css.isDone : undefined}>
                     <div className={css.container}>
-                    <input
-                        type={"checkbox"}
-                        checked={task.isDone}
-                        onChange={(event) => onChangeCheckBox(event, task.id)}
-                    />
-                    <ChangeTitle
-                        title={task.titleTask}
-                        saveTitle={(value)=> onSaveTitleTask(task.id, value, callback)}/>
-                    <BaseButton onClick={() => onDeleteTask(task.id)}>Delete</BaseButton>
+                        <input
+                            type={"checkbox"}
+                            checked={task.isDone}
+                            onChange={(event) => onChangeCheckBox(event, task.id)}
+                        />
+                        <ChangeTitle
+                            title={task.titleTask}
+                            saveTitle={(value, callback) => onSaveTitleTask(task.id, value, callback)}/>
+                        <BaseButton onClick={() => onDeleteTask(task.id)}>Delete</BaseButton>
                     </div>
                 </li>))}
         </ul>
