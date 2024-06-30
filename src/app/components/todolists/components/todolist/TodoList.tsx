@@ -32,12 +32,20 @@ export const TodoList = ({tasks, titleToDoList, setTasks, todoListId, setTodolis
     } else if (filterState === "Completed") {
         filterTask = tasks.filter((task) => task.isDone)
     }
+    const onSaveTitleTdl = (value: string, onSuccessCallback: () => void) => {
+        setTodolists(prevState => {
+            const newArr = prevState.map((tdl) => tdl.id === todoListId ? {...tdl, title: value} : tdl)
+
+            return newArr
+        })
+        onSuccessCallback()
+    }
     return <>
         <div><h3>{titleToDoList}</h3></div>
         <ChangeTitle
             title={titleToDoList}
-            todoListId={todoListId}
-            setTodolists={setTodolists}/>
+            saveTitle={onSaveTitleTdl}
+        />
         <AddTask tasks={filterTask} setTasks={setTasks} todoListId={todoListId}/>
         <TasksList setTasks={setTasks} filteredTasks={tasks} todoListId={todoListId}/>
         <FilterBlock filterState={filterState} setFilterState={setFilterState}/>
