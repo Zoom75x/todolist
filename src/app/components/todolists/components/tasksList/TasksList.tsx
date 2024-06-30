@@ -1,8 +1,9 @@
-import css from "../todolist/TodoList.module.css";
+import css from "./TaskList.module.css";
 import {Task} from "../todolist/TodoList.tsx";
 import {ChangeEvent, Dispatch, SetStateAction} from "react";
 import {TodoListType, TaskType} from "../../TodoLists.tsx";
 import {ChangeTitle} from "../changeTitle/ChangeTitle.tsx";
+import {BaseButton} from "../../../../../shared";
 
 export interface PropsType {
     filteredTasks: Task[]
@@ -45,6 +46,7 @@ export const TasksList = ({setTasks, todolistId, filteredTasks}: PropsType) => {
         <ul className={css.tasks}>
             {filteredTasks.map((task) => (
                 <li key={task.id} className={task.isDone ? css.isDone : undefined}>
+                    <div className={css.container}>
                     <input
                         type={"checkbox"}
                         checked={task.isDone}
@@ -53,10 +55,8 @@ export const TasksList = ({setTasks, todolistId, filteredTasks}: PropsType) => {
                     <ChangeTitle
                         title={task.titleTask}
                         saveTitle={(value)=> onSaveTitleTask(task.id, value, callback)}/>
-
-                    <button>Edit</button>
-
-                    <button onClick={() => onDeleteTask(task.id)}>Delete</button>
+                    <BaseButton onClick={() => onDeleteTask(task.id)}>Delete</BaseButton>
+                    </div>
                 </li>))}
         </ul>
     )

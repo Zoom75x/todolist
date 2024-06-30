@@ -4,7 +4,7 @@ import {TasksList} from "../tasksList/TasksList.tsx";
 import {Dispatch, SetStateAction, useState} from "react";
 import {TodoListType} from "../../TodoLists.tsx";
 import {ChangeTitle} from "../changeTitle/ChangeTitle.tsx";
-
+import css from "./TodoList.module.css"
 export interface Task {
     id: string
     titleTask: string
@@ -40,7 +40,7 @@ export const TodoList = ({tasks, titleToDoList, setTasks, todoListId, setTodolis
         })
         onSuccessCallback()
     }
-    return <>
+    return <div className={css.container}>
         <div><h3>{titleToDoList}</h3></div>
         <ChangeTitle
             title={titleToDoList}
@@ -49,5 +49,5 @@ export const TodoList = ({tasks, titleToDoList, setTasks, todoListId, setTodolis
         <AddTask tasks={filterTask} setTasks={setTasks} todoListId={todoListId}/>
         <TasksList setTasks={setTasks} filteredTasks={tasks} todoListId={todoListId}/>
         <FilterBlock filterState={filterState} setFilterState={setFilterState}/>
-    </>
+    </div>
 }

@@ -1,5 +1,6 @@
 import {useState} from "react";
-
+import {BaseButton} from "../../../../../shared";
+import css from  "./ChangeTitle.module.css"
 export interface PropsType {
     title: string
     saveTitle: (value: string, callback: () => void) => void
@@ -19,11 +20,11 @@ export const ChangeTitle = ({title, saveTitle}: PropsType) => {
         <div>
             {titleIsVisible ? (
                 <div>
-                    {title}
-                    <button onClick={() => {
+                    <div className={css.container}>{title}</div>
+                    <BaseButton onClick={() => {
                         setTitleIsVisible(false)
                     }}>change Title
-                    </button>
+                    </BaseButton>
                 </div>
             ) : (
                 <div>
@@ -32,14 +33,14 @@ export const ChangeTitle = ({title, saveTitle}: PropsType) => {
                         setValue(event.target.value)
                     }}/>
 
-                    <button onClick={() => {
+                    <BaseButton onClick={() => {
                         setTitleIsVisible(true)
                         setValue(title)
                     }}>Cansel
-                    </button>
+                    </BaseButton>
 
-                    <button onClick={() => onSave()}>Save
-                    </button>
+                    <BaseButton onClick={() => onSave()}>Save
+                    </BaseButton>
 
                 </div>)}
         </div>)

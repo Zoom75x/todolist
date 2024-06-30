@@ -1,8 +1,9 @@
-import css from "../todolist/TodoList.module.css";
+import css from "../tasksList/TaskList.module.css";
 import {v4 as uuidv4} from "uuid";
 import {ChangeEvent, Dispatch, KeyboardEvent, SetStateAction, useState} from "react";
 import {Task} from "../todolist/TodoList.tsx";
 import {TodoListType} from "../../TodoLists.tsx";
+import {BaseButton} from "../../../../../shared";
 
 interface PropsType {
     setTasks: Dispatch<SetStateAction<TodoListType[]>>
@@ -52,7 +53,7 @@ export const AddTask = ({setTasks, todoListId}: PropsType) => {
                    onFocus={onFocus}
                    onKeyUp={onKeyUp}
             />
-            <button onClick={addTask}>Add task</button>
+            <BaseButton onClick={addTask}>Add task</BaseButton>
         </div>
     )
 }
