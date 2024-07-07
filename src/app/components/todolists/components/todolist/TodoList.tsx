@@ -5,6 +5,7 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { TodoListType, TaskType } from '../../TodoLists.tsx'
 import { ChangeTitle } from '../changeTitle/ChangeTitle.tsx'
 import css from './TodoList.module.css'
+import { DeleteTdl } from '../deleteTdl/deleteTdl.tsx'
 
 export interface Task {
   id: string
@@ -54,6 +55,7 @@ export const TodoList = ({
         <h3>{titleToDoList}</h3>
       </div>
       <ChangeTitle title={titleToDoList} saveTitle={onSaveTitleTdl} />
+      <DeleteTdl setTasks={setTasks} todolistId={todolistId} setTodolists={setTodolists} />
       <AddTask setTasks={setTasks} todoListId={todolistId} />
       <TasksList setTasks={setTasks} filteredTasks={filterTask} todolistId={todolistId} />
       <FilterBlock filterState={filterState} setFilterState={setFilterState} />
