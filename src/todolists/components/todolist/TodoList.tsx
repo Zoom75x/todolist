@@ -2,17 +2,10 @@ import { FilterBlock } from '../filterBlock/FilterBlock.tsx'
 import { AddTask } from '../addTask/AddTask.tsx'
 import { TasksList } from '../tasksList/TasksList.tsx'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { TodoListType, TaskType } from '../../TodoLists.tsx'
 import { ChangeTitle } from '../changeTitle/ChangeTitle.tsx'
 import css from './TodoList.module.css'
 import { DeleteTdl } from '../deleteTdl/deleteTdl.tsx'
-
-export interface Task {
-  id: string
-  titleTask: string
-  isDone: boolean
-  todolistId: string
-}
+import { Task, TaskType, TodoListType } from '../../../types'
 
 interface PropsType {
   titleToDoList: string

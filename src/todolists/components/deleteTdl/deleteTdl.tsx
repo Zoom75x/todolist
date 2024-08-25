@@ -1,6 +1,6 @@
-import { TaskType, TodoListType } from '../../TodoLists.tsx'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { BaseButton, BaseModalWindow } from '../../../../../shared'
+import { BaseButton, BaseModalWindow } from '../../../shared'
+import { TaskType, TodoListType } from "../../../types";
 
 interface PropsType {
   setTasks: Dispatch<SetStateAction<TaskType>>

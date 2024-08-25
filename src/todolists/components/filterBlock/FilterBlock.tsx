@@ -1,5 +1,5 @@
 import { FilterStateType } from '../todolist/TodoList.tsx'
-import { BaseButton } from '../../../../../shared'
+import { BaseButton } from "../../../shared";
 
 export interface PropsType {
   filterState: FilterStateType

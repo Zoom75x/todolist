@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
-import { TaskType, TodoListType } from '../TodoLists.tsx'
 import { Dispatch, SetStateAction, useState } from 'react'
-import { BaseButton, BaseInput } from '../../../../shared'
+import { BaseButton, BaseInput } from '../../shared'
+import { TaskType, TodoListType } from "../../types";
 
 interface PropsType {
   setTodolists: Dispatch<SetStateAction<TodoListType[]>>

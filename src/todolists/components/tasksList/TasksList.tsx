@@ -1,9 +1,8 @@
 import css from './TaskList.module.css'
-import { Task } from '../todolist/TodoList.tsx'
-import { ChangeEvent, Dispatch, SetStateAction } from 'react'
-import { TaskType } from '../../TodoLists.tsx'
-import { ChangeTitle } from '../changeTitle/ChangeTitle.tsx'
-import { BaseButton, BaseCheckbox } from '../../../../../shared'
+import { ChangeEvent, Dispatch, SetStateAction, useContext } from "react";import { ChangeTitle } from '../changeTitle/ChangeTitle.tsx'
+import { BaseButton, BaseCheckbox } from "../../../shared";
+import { TodolistContext } from "../../../app/provider";
+import { Task, TaskType } from "../../../types";
 
 export interface PropsType {
   filteredTasks: Task[]
@@ -11,7 +10,9 @@ export interface PropsType {
   todolistId: string
   disabled?: boolean
 }
-export const TasksList = ({ setTasks, todolistId, filteredTasks, disabled }: PropsType) => {
+export const TasksList = ({ setTasks, todolistId, filteredTasks }: PropsType) => {
+  const data = useContext(TodolistContext)
+    console.log("TodolistContext", data)
   const onDeleteTask = (id: string) => {
     setTasks((prevState) => {
       const targetTodolist = prevState[todolistId]
