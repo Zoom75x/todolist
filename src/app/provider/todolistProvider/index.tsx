@@ -5,8 +5,8 @@ import { initialTasks, initialTodoLists } from './data.ts'
 interface PropsContext {
   todoLists: TodoListType[]
   setTodolists: Dispatch<SetStateAction<TodoListType[]>>
-  tasks: TaskType
-  setTasks: Dispatch<SetStateAction<TaskType>>
+  tasksObj: TaskType
+  setTasksObj: Dispatch<SetStateAction<TaskType>>
 }
 
 interface PropsType {
@@ -16,9 +16,9 @@ interface PropsType {
 export const TodolistContext = createContext<PropsContext>({} as PropsContext)
 export const TodolistProvider = ({ children }: PropsType) => {
   const [todoLists, setTodolists] = useState<TodoListType[]>(initialTodoLists)
-  const [tasks, setTasks] = useState<TaskType>(initialTasks)
+  const [tasksObj, setTasksObj] = useState<TaskType>(initialTasks)
   const getData = (): PropsContext => {
-    return { todoLists, setTodolists, tasks, setTasks }
+    return { todoLists, setTodolists, tasksObj, setTasksObj }
   }
   return <TodolistContext.Provider value={getData()}>{children}</TodolistContext.Provider>
 }

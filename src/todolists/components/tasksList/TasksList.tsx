@@ -1,18 +1,18 @@
 import css from './TaskList.module.css'
-import { ChangeEvent, Dispatch, SetStateAction, useContext } from "react";import { ChangeTitle } from '../changeTitle/ChangeTitle.tsx'
-import { BaseButton, BaseCheckbox } from "../../../shared";
-import { TodolistContext } from "../../../app/provider";
-import { Task, TaskType } from "../../../types";
+import { ChangeEvent, useContext } from 'react'
+import { ChangeTitle } from '../changeTitle/ChangeTitle.tsx'
+import { BaseButton, BaseCheckbox } from '../../../shared'
+import { TodolistContext } from '../../../app/provider'
+import { Task } from '../../../types'
 
 export interface PropsType {
   filteredTasks: Task[]
-  setTasks: Dispatch<SetStateAction<TaskType>>
   todolistId: string
   disabled?: boolean
 }
-export const TasksList = ({ setTasks, todolistId, filteredTasks }: PropsType) => {
-  const data = useContext(TodolistContext)
-    console.log("TodolistContext", data)
+
+export const TasksList = ({ todolistId, filteredTasks }: PropsType) => {
+  const { setTasksObj: setTasks } = useContext(TodolistContext)
   const onDeleteTask = (id: string) => {
     setTasks((prevState) => {
       const targetTodolist = prevState[todolistId]
