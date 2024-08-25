@@ -1,14 +1,14 @@
-import { TaskType, TodoListType } from '../../TodoLists.tsx'
-import { Dispatch, SetStateAction, useState } from 'react'
-import { BaseButton, BaseModalWindow } from '../../../../../shared'
+import { useContext, useState } from 'react'
+import { BaseButton, BaseModalWindow } from '../../../shared'
+import { TaskType } from '../../../types'
+import { TodolistContext } from '../../../app/provider'
 
 interface PropsType {
-  setTasks: Dispatch<SetStateAction<TaskType>>
   todolistId: string
-  setTodolists: Dispatch<SetStateAction<TodoListType[]>>
 }
 
-export const DeleteTdl = ({ setTasks, todolistId, setTodolists }: PropsType) => {
+export const DeleteTdl = ({ todolistId }: PropsType) => {
+  const { setTodolists: setTodolists, setTasksObj: setTasks } = useContext(TodolistContext)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const onDeleteTodolist = () => {
     setTasks((prevState) => {

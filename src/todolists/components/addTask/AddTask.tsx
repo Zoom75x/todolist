@@ -1,16 +1,16 @@
 import css from '../tasksList/TaskList.module.css'
 import { v4 as uuidv4 } from 'uuid'
-import { ChangeEvent, Dispatch, KeyboardEvent, SetStateAction, useState } from 'react'
-import { Task } from '../todolist/TodoList.tsx'
-import { TaskType } from '../../TodoLists.tsx'
-import { BaseButton, BaseInput } from '../../../../../shared'
+import { ChangeEvent, KeyboardEvent, useContext, useState } from 'react'
+import { BaseButton, BaseInput } from '../../../shared'
+import { Task } from '../../../types'
+import { TodolistContext } from '../../../app/provider'
 
 interface PropsType {
-  setTasks: Dispatch<SetStateAction<TaskType>>
   todoListId: string
 }
 
-export const AddTask = ({ setTasks, todoListId }: PropsType) => {
+export const AddTask = ({ todoListId }: PropsType) => {
+  const { setTasksObj: setTasks } = useContext(TodolistContext)
   const [value, setValue] = useState<string>('')
   const [error, setError] = useState<boolean>(false)
 

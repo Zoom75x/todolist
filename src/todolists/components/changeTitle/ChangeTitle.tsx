@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BaseButton, BaseInput } from '../../../../../shared'
+import { BaseButton, BaseInput } from '../../../shared'
 import css from './ChangeTitle.module.css'
 
 export interface PropsType {
