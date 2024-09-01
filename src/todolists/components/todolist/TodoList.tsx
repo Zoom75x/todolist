@@ -15,7 +15,7 @@ interface PropsType {
 
 export type FilterStateType = 'All' | 'Active' | 'Completed'
 export const TodoList = ({ titleToDoList, todolistId }: PropsType) => {
-  const { setTodolists, tasksObj } = useContext(TodolistContext)
+  const { tasksObj, onSaveTitleTdl } = useContext(TodolistContext)
   const tasks = tasksObj[todolistId]
   const [filterState, setFilterState] = useState<FilterStateType>('All')
   let filterTask: Task[] = []
@@ -27,21 +27,13 @@ export const TodoList = ({ titleToDoList, todolistId }: PropsType) => {
   } else if (filterState === 'Completed') {
     filterTask = tasks.filter((task) => task.isDone)
   }
-  const onSaveTitleTdl = (value: string, onSuccessCallback: () => void) => {
-    setTodolists((prevState) => {
-      const newArr = prevState.map((tdl) =>
-        tdl.id === todolistId ? { ...tdl, title: value } : tdl
-      )
-      return newArr
-    })
-    onSuccessCallback()
-  }
+
   return (
     <div className={css.container}>
       <div>
         <h3>{titleToDoList}</h3>
       </div>
-      <ChangeTitle title={titleToDoList} saveTitle={onSaveTitleTdl} />
+      <ChangeTitle title={titleToDoList} saveTitle={(value, callback)=> {onSaveTitleTdl(todolistId, value, callback)}}/>
       <DeleteTdl todolistId={todolistId} />
       <AddTask todoListId={todolistId} />
       <TasksList filteredTasks={filterTask} todolistId={todolistId} />

@@ -16,7 +16,7 @@ export const ChangeTitle = ({ title, saveTitle, disabled }: PropsType) => {
     setTitleIsVisible(true)
   }
   const onSave = () => {
-    saveTitle(value, onCloseInput)
+    saveTitle( value, onCloseInput)
   }
   return (
     <div>

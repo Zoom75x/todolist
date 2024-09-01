@@ -1,8 +1,6 @@
 import css from '../tasksList/TaskList.module.css'
-import { v4 as uuidv4 } from 'uuid'
 import { ChangeEvent, KeyboardEvent, useContext, useState } from 'react'
 import { BaseButton, BaseInput } from '../../../shared'
-import { Task } from '../../../types'
 import { TodolistContext } from '../../../app/provider'
 
 interface PropsType {
@@ -10,7 +8,7 @@ interface PropsType {
 }
 
 export const AddTask = ({ todoListId }: PropsType) => {
-  const { setTasksObj: setTasks } = useContext(TodolistContext)
+  const { addTask } = useContext(TodolistContext)
   const [value, setValue] = useState<string>('')
   const [error, setError] = useState<boolean>(false)
 
@@ -23,32 +21,21 @@ export const AddTask = ({ todoListId }: PropsType) => {
       setError(true)
     }
   }
+  const onClickAddTask = () => {
+    addTask(
+      value,
+      todoListId,
+       ()=> setValue(""),
+      ()=> setError(true))
+  }
   const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.code === 'Enter') {
-      addTask()
+      onClickAddTask()
     } else if (event.code === 'Escape') {
       setValue('')
     }
   }
-  const addTask = () => {
-    if (value) {
-      setTasks((prevState) => {
-        const newTask: Task = {
-          id: uuidv4(),
-          titleTask: value,
-          isDone: false,
-          todolistId: todoListId,
-        }
-        const tasks = prevState[todoListId]
-        const newTasks = [newTask, ...tasks]
-        return { ...prevState, ...{ [todoListId]: newTasks } }
-      })
-
-      setValue('')
-    } else {
-      setError(true)
-    }
-  }
+  
   return (
     <div>
       <BaseInput
@@ -59,7 +46,7 @@ export const AddTask = ({ todoListId }: PropsType) => {
         onFocus={onFocus}
         onKeyUp={onKeyUp}
       />
-      <BaseButton onClick={addTask}>Add task</BaseButton>
+      <BaseButton onClick={onClickAddTask}>Add task</BaseButton>
     </div>
   )
 }
