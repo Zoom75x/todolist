@@ -1,13 +1,11 @@
 import './App.module.css'
-import { TodolistProvider } from "./app/provider";
-import { TodoLists } from "./todolists";
+import { Fetch } from './fetch/Fetch.tsx'
 
 export const App = () => {
   return (
-    <>
-     <TodolistProvider>
+    /*<TodolistProvider>
        <TodoLists />
-     </TodolistProvider>
-    </>
+     </TodolistProvider>*/
+    <Fetch />
   )
 }
