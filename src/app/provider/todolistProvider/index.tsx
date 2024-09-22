@@ -92,8 +92,6 @@ export const TodolistProvider = ({ children }: PropsType) => {
     callback()
   }
 
-
-
   const getMyTodolist = async () => {
     const access_token = localStorage.getItem(ACCESS_TOKEN)
     if (access_token) {
@@ -120,28 +118,29 @@ export const TodolistProvider = ({ children }: PropsType) => {
         const data: TaskResponse[] = await result.json()
         const convertTask = (tasks: TaskResponse[]): Task[] => {
           return tasks.map(
-            (task):Task => ({
-            id: task.id,
-            titleTask: task.title,
-            isDone: task.is_completed,
-            todolistId: task.todolist_id,
-            createdAt: task.created_at,
-            description: task.description,
-            dueDate: task.due_date,
-          }))
+            (task): Task => ({
+              id: task.id,
+              titleTask: task.title,
+              isDone: task.is_completed,
+              todolistId: task.todolist_id,
+              createdAt: task.created_at,
+              description: task.description,
+              dueDate: task.due_date,
+            })
+          )
         }
-        const taskObj:TaskType={}
-        
+        const taskObj: TaskType = {}
         convertTask(data).forEach((el) => {
           if (taskObj[el.todolistId]) {
-            taskObj[el.todolistId] = [...tasksObj[el.todolistId], el]
-          }else{
+            console.log(taskObj[el.todolistId], el)
+            taskObj[el.todolistId] = [...taskObj[el.todolistId], el]
+          } else {
             taskObj[el.todolistId] = [el]
           }
-          })
+        })
         setTasksObj(taskObj)
-      }else{
-        console.error('AuthErr')
+      } else {
+        console.error('Autherr')
       }
     }
   }
