@@ -5,7 +5,13 @@ import { TodoLists } from './todolists'
 import { Login } from './feature/login'
 import { AuthContext, AuthProvider } from './app/provider/authProvider'
 import { BaseButton } from './shared'
+import { Provider, useSelector } from "react-redux";
+import { RootState, rootStore } from "./app/rootStore";
+
+
 export const App = () => {
+  const  {name}  = useSelector((state: RootState) => state.userStore)
+    console.log(name)
   const { isAuthentificated, authMe, logOut } = useContext(AuthContext)
   useEffect(() => {
     if (!isAuthentificated) {
@@ -27,7 +33,9 @@ export const App = () => {
 export const WrapperApp = () => {
   return (
     <AuthProvider>
+      <Provider store={rootStore}>
       <App />
+      </Provider>
     </AuthProvider>
   )
 }
