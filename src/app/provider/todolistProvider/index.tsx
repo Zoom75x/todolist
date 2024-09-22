@@ -1,7 +1,6 @@
 import { createContext, Dispatch, ReactNode, SetStateAction, useState } from 'react'
-import { Task, TaskType, TodoListType } from '../../../types'
-import { initialTasks, initialTodoLists } from './data.ts'
-import { v4 as uuidv4 } from 'uuid'
+import { Task, TaskResponse, TaskType, TodoListType } from '../../../types'
+import { ACCESS_TOKEN, BASE_URL } from '../../../shared'
 
 interface PropsContext {
   todoLists: TodoListType[]
@@ -18,8 +17,15 @@ interface PropsContext {
   ) => void
   onDeleteTask: (taskId: string, todolistId: string) => void
   isCompletedTask: (checked: boolean, taskId: string, todolistId: string) => void
-  onDeleteTodolist: (todolistId:string, callback: ()=> void) => void
-  addTask : (value:string, todoListId:string, successCallback: ()=> void, errorCallback: ()=> void) =>void
+  onDeleteTodolist: (todolistId: string, callback: () => void) => void
+  addTask: (
+    value: string,
+    todoListId: string,
+    successCallback: () => void,
+    errorCallback: () => void
+  ) => void
+  getMyTodolist: () => void
+  getMyTasks: () => void
 }
 
 interface PropsType {
@@ -28,25 +34,10 @@ interface PropsType {
 
 export const TodolistContext = createContext<PropsContext>({} as PropsContext)
 export const TodolistProvider = ({ children }: PropsType) => {
-  const [todoLists, setTodolists] = useState<TodoListType[]>(initialTodoLists)
-  const [tasksObj, setTasksObj] = useState<TaskType>(initialTasks)
-  const addTodolist = (titleTdl:string, succsessCallback:() => void) => {
-    const todolistId = uuidv4()
-    const newTodolist: TodoListType = {
-      id: todolistId,
-      title: titleTdl,
-    }
-    const newTask = {
-      [todolistId]: [],
-    }
-    setTodolists((prevState) => [newTodolist, ...prevState])
-    setTasksObj((prevState) => {
-      return { ...prevState, ...newTask }
-    })
-    succsessCallback()
-    //setValue('')
-  }
-  const onSaveTitleTdl = (todolistId: string,value: string, onSuccessCallback: () => void) => {
+  const [todoLists, setTodolists] = useState<TodoListType[]>([])
+  const [tasksObj, setTasksObj] = useState<TaskType>({})
+
+  const onSaveTitleTdl = (todolistId: string, value: string, onSuccessCallback: () => void) => {
     setTodolists((prevState) => {
       const newArr = prevState.map((tdl) =>
         tdl.id === todolistId ? { ...tdl, title: value } : tdl
@@ -55,7 +46,12 @@ export const TodolistProvider = ({ children }: PropsType) => {
     })
     onSuccessCallback()
   }
-  const onSaveTitleTask = (todolistId:string, taskId: string, value: string, succsessCallback: () => void) => {
+  const onSaveTitleTask = (
+    todolistId: string,
+    taskId: string,
+    value: string,
+    succsessCallback: () => void
+  ) => {
     setTasksObj((prevState) => {
       const tasks: Task[] = prevState[todolistId]
       const newTasks: Task[] = tasks.map((item) =>
@@ -65,14 +61,14 @@ export const TodolistProvider = ({ children }: PropsType) => {
     })
     succsessCallback()
   }
-  const onDeleteTask = (taskId: string, todolistId:string) => {
+  const onDeleteTask = (taskId: string, todolistId: string) => {
     setTasksObj((prevState) => {
       const targetTodolist = prevState[todolistId]
       const filteredTask = targetTodolist.filter((el) => el.id !== taskId)
       return { ...prevState, ...{ [todolistId]: filteredTask } }
     })
   }
-  const isCompletedTask = (checked:boolean, taskId: string,todolistId:string) => {
+  const isCompletedTask = (checked: boolean, taskId: string, todolistId: string) => {
     setTasksObj((prevState) => {
       const tasks = prevState[todolistId]
       const resultTasks = tasks.map((task) =>
@@ -84,7 +80,7 @@ export const TodolistProvider = ({ children }: PropsType) => {
       return { ...prevState, ...resObj }
     })
   }
-  const onDeleteTodolist = (todolistId:string, callback: ()=> void) => {
+  const onDeleteTodolist = (todolistId: string, callback: () => void) => {
     setTasksObj((prevState) => {
       const newObjTask: TaskType = { ...prevState }
       delete newObjTask[todolistId]
@@ -95,27 +91,120 @@ export const TodolistProvider = ({ children }: PropsType) => {
     })
     callback()
   }
-  const addTask = (value:string, todoListId:string, successCallback: ()=> void, errorCallback: ()=> void) => {
-    if (value) {
-      setTasksObj((prevState) => {
-        const newTask: Task = {
-          id: uuidv4(),
-          titleTask: value,
-          isDone: false,
-          todolistId: todoListId,
-        }
-        const tasks = prevState[todoListId]
-        const newTasks = [newTask, ...tasks]
-        return { ...prevState, ...{ [todoListId]: newTasks } }
-      })
 
-      successCallback()
-    } else {
-      errorCallback()
+
+
+  const getMyTodolist = async () => {
+    const access_token = localStorage.getItem(ACCESS_TOKEN)
+    if (access_token) {
+      const result = await fetch(`${BASE_URL}/todolist`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${access_token}` },
+      })
+      if (result.ok) {
+        const data: TodoListType[] = await result.json()
+        setTodolists(data)
+      } else {
+        console.log('AuthErr')
+      }
+    }
+  }
+  const getMyTasks = async () => {
+    const access_token = localStorage.getItem(ACCESS_TOKEN)
+    if (access_token) {
+      const result = await fetch(`${BASE_URL}/task`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${access_token}` },
+      })
+      if (result.ok) {
+        const data: TaskResponse[] = await result.json()
+        const convertTask = (tasks: TaskResponse[]): Task[] => {
+          return tasks.map(
+            (task):Task => ({
+            id: task.id,
+            titleTask: task.title,
+            isDone: task.is_completed,
+            todolistId: task.todolist_id,
+            createdAt: task.created_at,
+            description: task.description,
+            dueDate: task.due_date,
+          }))
+        }
+        const taskObj:TaskType={}
+        
+        convertTask(data).forEach((el) => {
+          if (taskObj[el.todolistId]) {
+            taskObj[el.todolistId] = [...tasksObj[el.todolistId], el]
+          }else{
+            taskObj[el.todolistId] = [el]
+          }
+          })
+        setTasksObj(taskObj)
+      }else{
+        console.error('AuthErr')
+      }
+    }
+  }
+  const addTask = async (
+    value: string,
+    todoListId: string,
+    successCallback: () => void,
+    errorCallback: () => void
+  ) => {
+    const access_token = localStorage.getItem(ACCESS_TOKEN)
+    if (access_token) {
+      const result = await fetch(`${BASE_URL}/task`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${access_token}` },
+        body: JSON.stringify({
+          description: '',
+          todolist_id: todoListId,
+          title: value,
+        }),
+      })
+      if (result.ok) {
+        successCallback()
+      } else {
+        console.log('AuthErr')
+        errorCallback()
+      }
+    }
+  }
+  const addTodolist = async (titleTdl: string, succsessCallback: () => void) => {
+    const access_token = localStorage.getItem(ACCESS_TOKEN)
+    if (access_token) {
+      const result = await fetch(`${BASE_URL}/todolist`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${access_token}` },
+        body: JSON.stringify({
+          title: titleTdl,
+          description: '',
+        }),
+      })
+      if (result.ok) {
+        succsessCallback()
+        getMyTodolist()
+      } else {
+        console.log('AuthErr')
+      }
     }
   }
   const getData = (): PropsContext => {
-    return { todoLists, setTodolists, tasksObj, setTasksObj, addTodolist, onSaveTitleTdl,onSaveTitleTask, onDeleteTask,isCompletedTask, onDeleteTodolist, addTask }
+    return {
+      todoLists,
+      setTodolists,
+      tasksObj,
+      setTasksObj,
+      addTodolist,
+      onSaveTitleTdl,
+      onSaveTitleTask,
+      onDeleteTask,
+      isCompletedTask,
+      onDeleteTodolist,
+      addTask,
+      getMyTodolist,
+      getMyTasks,
+    }
   }
   return <TodolistContext.Provider value={getData()}>{children}</TodolistContext.Provider>
 }

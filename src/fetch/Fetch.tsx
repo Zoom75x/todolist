@@ -5,7 +5,6 @@ interface User {
   name: string
   id: string
 }
-
 export const Fetch = () => {
   const [state, setState] = useState<User[]>([])
   const getData = () => {

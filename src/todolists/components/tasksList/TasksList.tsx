@@ -18,7 +18,7 @@ export const TasksList = ({ todolistId, filteredTasks }: PropsType) => {
 
   return (
     <ul className={css.tasks}>
-      {filteredTasks.map((task) => (
+      {filteredTasks?.map((task) => (
         <li key={task.id} className={task.isDone ? css.isDone : undefined}>
           <div className={css.container}>
             <BaseCheckbox

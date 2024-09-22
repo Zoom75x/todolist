@@ -1,11 +1,15 @@
 import { TodoList } from './components'
 import { AddTodolist } from './addTodolist/AddTodolist.tsx'
 import css from './TodoLists.module.css'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { TodolistContext } from '../app/provider'
 
 export const TodoLists = () => {
-  const { todoLists } = useContext(TodolistContext)
+  const { todoLists, getMyTodolist,  getMyTasks} = useContext(TodolistContext)
+  useEffect(() => {
+    getMyTodolist()
+    getMyTasks()
+  }, [])
   return (
     <div>
       <AddTodolist />
