@@ -1,29 +1,36 @@
 import './App.module.css'
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { TodolistProvider } from './app/provider'
 import { TodoLists } from './todolists'
 import { Login } from './feature/login'
-import { AuthContext, AuthProvider } from './app/provider/authProvider'
+import { AuthProvider } from './app/provider/authProvider'
 import { BaseButton } from './shared'
-import { Provider, useSelector } from "react-redux";
-import { RootState, rootStore } from "./app/rootStore";
-
+import { Provider, useSelector } from 'react-redux'
+import { RootState, rootStore, useAppDispatch } from './app/rootStore'
+import { authMe } from './entity/user/api/autMe.ts'
+import { logOut } from './entity/user/store'
 
 export const App = () => {
-  const  {name}  = useSelector((state: RootState) => state.userStore)
-    console.log(name)
-  const { isAuthentificated, authMe, logOut } = useContext(AuthContext)
+  const { name, isAuthentificated, isInitialised } = useSelector((state: RootState) => state.userStore)
+  const dispatch = useAppDispatch()
+  console.log(name)
   useEffect(() => {
     if (!isAuthentificated) {
-      authMe()
+      dispatch(authMe())
     }
   }, [])
+  if (!isInitialised) {
+    return <>Loading</>
+  }
   if (!isAuthentificated) {
     return <Login />
   }
+  const onClickLogOut = () => {
+    dispatch(logOut())
+  }
   return (
     <div>
-      <BaseButton onClick={logOut}>Выйти из профиля</BaseButton>
+      <BaseButton onClick={onClickLogOut}>Выйти из профиля</BaseButton>
       <TodolistProvider>
         <TodoLists />
       </TodolistProvider>
@@ -34,7 +41,7 @@ export const WrapperApp = () => {
   return (
     <AuthProvider>
       <Provider store={rootStore}>
-      <App />
+        <App />
       </Provider>
     </AuthProvider>
   )
