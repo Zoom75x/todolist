@@ -1,15 +1,22 @@
 import { TodoList } from './components'
 import { AddTodolist } from './addTodolist/AddTodolist.tsx'
 import css from './TodoLists.module.css'
-import { useContext, useEffect } from 'react'
-import { TodolistContext } from '../app/provider'
+import { useEffect } from 'react'
+import { RootState, useAppDispatch } from '../app/rootStore'
+import { getMyTodolist } from '../entity/todolist'
+import { useSelector } from 'react-redux'
+import { getMyTask } from '../entity'
 
 export const TodoLists = () => {
-  const { todoLists, getMyTodolist,  getMyTasks} = useContext(TodolistContext)
+  const { todoLists } = useSelector((state: RootState) => state.todolistStore)
+  const { tasks } = useSelector((state: RootState) => state.taskStore)
+  const dispatch = useAppDispatch()
+  console.log(tasks)
   useEffect(() => {
-    getMyTodolist()
-    getMyTasks()
+    dispatch(getMyTodolist())
+    dispatch(getMyTask())
   }, [])
+
   return (
     <div>
       <AddTodolist />

@@ -3,7 +3,6 @@ import { useEffect } from 'react'
 import { TodolistProvider } from './app/provider'
 import { TodoLists } from './todolists'
 import { Login } from './feature/login'
-import { AuthProvider } from './app/provider/authProvider'
 import { BaseButton } from './shared'
 import { Provider, useSelector } from 'react-redux'
 import { RootState, rootStore, useAppDispatch } from './app/rootStore'
@@ -39,10 +38,8 @@ export const App = () => {
 }
 export const WrapperApp = () => {
   return (
-    <AuthProvider>
       <Provider store={rootStore}>
         <App />
       </Provider>
-    </AuthProvider>
   )
 }

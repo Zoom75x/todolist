@@ -1,10 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { userSlice } from '../../entity'
+import { taskSlice, todolistSlice, userSlice } from "../../entity";
 import { useDispatch } from 'react-redux'
+
 
 export const rootStore = configureStore({
   reducer: {
     userStore: userSlice.reducer,
+    todolistStore: todolistSlice.reducer,
+    taskStore:taskSlice.reducer
   },
 })
 
