@@ -1,19 +1,23 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { BaseButton, BaseModalWindow } from '../../../shared'
-import { TodolistContext } from '../../../app/provider'
+import { useAppDispatch } from '../../../app/rootStore'
+import { deleteTodolist } from "../../../entity/todolist/api/deleteTodolist.ts";
 
 interface PropsType {
   todolistId: string
 }
 
 export const DeleteTdl = ({ todolistId }: PropsType) => {
-  const { onDeleteTodolist } = useContext(TodolistContext)
+  const dispatch = useAppDispatch()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   return (
     <>
       <BaseButton onClick={() => setIsOpen(true)}>Delete</BaseButton>
       {isOpen && (
-        <BaseModalWindow onCancel={() => setIsOpen(false)} onOk={()=> onDeleteTodolist(todolistId, ()=>setIsOpen(false))}>
+        <BaseModalWindow
+          onCancel={() => setIsOpen(false)}
+          onOk={() => dispatch(deleteTodolist({todolistId, successCallback:() => setIsOpen(false)}))}
+        >
           <div>Вы хотите удалить?</div>
         </BaseModalWindow>
       )}

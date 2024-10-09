@@ -1,3 +1,9 @@
+
+export interface TodolistRequest {
+  title: string
+  description: string
+}
+
 export interface TodolistResponse {
   "id": string,
   "title": string,
@@ -11,4 +17,7 @@ export interface TodolistDTO {
   "description": string,
   "createdAt": string,
   "userId": string
+}
+export interface DeleteTodolistParams {
+  "todolistId": string,
 }
