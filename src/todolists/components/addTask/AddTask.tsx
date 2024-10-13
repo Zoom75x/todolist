@@ -1,19 +1,19 @@
 import css from '../tasksList/TaskList.module.css'
-import { ChangeEvent, KeyboardEvent, useContext, useState } from 'react'
+import { ChangeEvent, KeyboardEvent, useState } from 'react'
 import { BaseButton, BaseInput } from '../../../shared'
-import { TodolistContext } from '../../../app/provider'
+import { useAppDispatch } from '../../../app/rootStore'
+import { addTask } from '../../../entity'
 
 interface PropsType {
   todoListId: string
 }
 
 export const AddTask = ({ todoListId }: PropsType) => {
-  const { addTask } = useContext(TodolistContext)
+  const dispatch = useAppDispatch()
   const [value, setValue] = useState<string>('')
   const [error, setError] = useState<boolean>(false)
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(value, e.currentTarget.value)
     setValue(e.currentTarget.value.trim())
   }
   const onFocus = () => {
@@ -22,11 +22,14 @@ export const AddTask = ({ todoListId }: PropsType) => {
     }
   }
   const onClickAddTask = () => {
-    addTask(
-      value,
-      todoListId,
-       ()=> setValue(""),
-      ()=> setError(true))
+    dispatch(
+      addTask({
+        value,
+        todoListId,
+        successCallback: () => setValue(''),
+        errorCallback: () => setError(true),
+      })
+    )
   }
   const onKeyUp = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.code === 'Enter') {
@@ -35,7 +38,7 @@ export const AddTask = ({ todoListId }: PropsType) => {
       setValue('')
     }
   }
-  
+
   return (
     <div>
       <BaseInput

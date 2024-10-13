@@ -9,9 +9,7 @@ import { getMyTask } from '../entity'
 
 export const TodoLists = () => {
   const { todoLists } = useSelector((state: RootState) => state.todolistStore)
-  const { tasks } = useSelector((state: RootState) => state.taskStore)
   const dispatch = useAppDispatch()
-  console.log(tasks)
   useEffect(() => {
     dispatch(getMyTodolist())
     dispatch(getMyTask())

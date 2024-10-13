@@ -23,12 +23,6 @@ const todolistSlice = createSlice({
       })
       .addCase(getMyTodolist.fulfilled, (state, action) => {
         state.todoLists = action.payload.sort((a, b) => {
-          console.log(
-            a.createdAt,
-            new Date(a.createdAt),
-            new Date(a.createdAt).getTime(),
-            '////////'
-          )
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         })
         state.isLoading = false

@@ -3,7 +3,9 @@ import { useContext } from 'react'
 import { ChangeTitle } from '../changeTitle/ChangeTitle.tsx'
 import { BaseButton, BaseCheckbox } from '../../../shared'
 import { TodolistContext } from '../../../app/provider'
-import { TaskResponseDTO } from "../../../entity";
+import { TaskResponseDTO } from '../../../entity'
+import { useAppDispatch } from '../../../app/rootStore'
+import { updateTask } from '../../../entity/task/api/updateTask.ts'
 
 export interface PropsType {
   filteredTasks: TaskResponseDTO[]
@@ -12,10 +14,8 @@ export interface PropsType {
 }
 
 export const TasksList = ({ todolistId, filteredTasks }: PropsType) => {
-  const { onSaveTitleTask, onDeleteTask, isCompletedTask } = useContext(TodolistContext)
-
-  
-
+  const { onDeleteTask } = useContext(TodolistContext)
+  const dispatch = useAppDispatch()
   return (
     <ul className={css.tasks}>
       {filteredTasks?.map((task) => (
@@ -23,15 +23,22 @@ export const TasksList = ({ todolistId, filteredTasks }: PropsType) => {
           <div className={css.container}>
             <BaseCheckbox
               checked={task.isCompleted}
-              onChange={(event) => isCompletedTask(event.target.checked, task.id, todolistId)}
+              onChange={(event) => {
+                dispatch(updateTask({isCompleted:event.target.checked, taskId: task.id }))
+              }}
             />
             <ChangeTitle
               title={task.title}
-              saveTitle={( value, successCallback) =>
-                onSaveTitleTask(todolistId, task.id, value, successCallback)}
+              saveTitle={(value, successCallback) => {
+                dispatch(updateTask({ title: value, taskId: task.id, successCallback }))
+                //onSaveTitleTask(todolistId, task.id, value, successCallback)
+              }}
               disabled={task.isCompleted}
             />
-            <BaseButton onClick={() => onDeleteTask(task.id, todolistId)} disabled={task.isCompleted}>
+            <BaseButton
+              onClick={() => onDeleteTask(task.id, todolistId)}
+              disabled={task.isCompleted}
+            >
               Delete
             </BaseButton>
           </div>

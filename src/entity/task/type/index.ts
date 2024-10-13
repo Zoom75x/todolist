@@ -7,6 +7,7 @@ export interface TaskResponse {
   title: string
   due_date: string
 }
+
 export interface TaskResponseDTO {
   id: string
   isCompleted: boolean
@@ -16,3 +17,7 @@ export interface TaskResponseDTO {
   title: string
   dueDate: string
 }
+export interface TaskUpdateRequest extends Partial<Pick<TaskResponseDTO, 'isCompleted' | 'title'>> {
+
+}
+//type TaskUpdate = Pick<TaskResponseDTO, 'isCompleted' | 'title'> вариант записи типа
