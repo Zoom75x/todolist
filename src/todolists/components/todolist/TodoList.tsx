@@ -44,7 +44,7 @@ export const TodoList = ({ titleToDoList, todolistId }: PropsType) => {
       />
       <DeleteTdl todolistId={todolistId} />
       <AddTask todoListId={todolistId} />
-      <TasksList filteredTasks={filterTask} todolistId={todolistId} />
+      <TasksList filteredTasks={filterTask} />
       <FilterBlock filterState={filterState} setFilterState={setFilterState} />
     </div>
   )

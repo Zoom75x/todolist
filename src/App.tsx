@@ -1,6 +1,5 @@
 import './App.module.css'
 import { useEffect } from 'react'
-import { TodolistProvider } from './app/provider'
 import { TodoLists } from './todolists'
 import { Login } from './feature/login'
 import { BaseButton } from './shared'
@@ -8,9 +7,13 @@ import { Provider, useSelector } from 'react-redux'
 import { RootState, rootStore, useAppDispatch } from './app/rootStore'
 import { authMe } from './entity/user/api/autMe.ts'
 import { logOut } from './entity/user/store'
+import { ToastContainer } from './shared';
+import "react-toastify/dist/ReactToastify.css";
 
 export const App = () => {
-  const { name, isAuthentificated, isInitialised } = useSelector((state: RootState) => state.userStore)
+  const { name, isAuthentificated, isInitialised } = useSelector(
+    (state: RootState) => state.userStore
+  )
   const dispatch = useAppDispatch()
   console.log(name)
   useEffect(() => {
@@ -30,16 +33,19 @@ export const App = () => {
   return (
     <div>
       <BaseButton onClick={onClickLogOut}>Выйти из профиля</BaseButton>
-      <TodolistProvider>
-        <TodoLists />
-      </TodolistProvider>
+      <TodoLists />
     </div>
   )
 }
 export const WrapperApp = () => {
   return (
-      <Provider store={rootStore}>
-        <App />
-      </Provider>
+    <Provider store={rootStore}>
+      <App />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        closeOnClick
+      />
+    </Provider>
   )
 }

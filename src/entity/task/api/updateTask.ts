@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { apiInstance } from '../../../shared'
 import { TaskResponse, TaskResponseDTO, TaskUpdateRequest } from '../type'
+import { errorHandler } from "../../../shared/api/axiosinstance.ts";
 
 interface CommonData {
   taskId: string
@@ -9,24 +10,29 @@ interface CommonData {
 
 export const updateTask = createAsyncThunk<TaskResponseDTO, TaskUpdateRequest & CommonData>(
   'tasks/updateTask',
-  async (params) => {
-    const { taskId, successCallback, ...data } = params
-    const {isCompleted:is_completed, title} = data
-    const response = await apiInstance.patch<TaskResponse>(`/task/${taskId}`, {is_completed, title})
-    const {
-      is_completed: isCompleted,
-      todolist_id: todolistId,
-      created_at: createdAt,
-      due_date: dueDate,
-      ...rest
-    } = response.data
-    successCallback?.()
-    return {
-      isCompleted,
-      createdAt,
-      todolistId,
-      dueDate,
-      ...rest,
+  async (params, {rejectWithValue}) => {
+    try {
+      const { taskId, successCallback, ...data } = params
+      const {isCompleted:is_completed, title} = data
+      const response = await apiInstance.patch<TaskResponse>(`/task/${taskId}`, {is_completed, title})
+      const {
+        is_completed: isCompleted,
+        todolist_id: todolistId,
+        created_at: createdAt,
+        due_date: dueDate,
+        ...rest
+      } = response.data
+      successCallback?.()
+      return {
+        isCompleted,
+        createdAt,
+        todolistId,
+        dueDate,
+        ...rest,
+      }
+    }
+    catch (error) {
+      return rejectWithValue(errorHandler(error))
     }
   }
 )

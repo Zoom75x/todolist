@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { apiInstance } from '../../../shared'
 import { TaskResponse, TaskResponseDTO } from '../type'
+import { errorHandler } from "../../../shared/api/axiosinstance.ts";
 
 const normalizedTask = (tasks: TaskResponse[]): TaskResponseDTO[] => {
   return tasks.map((task) => {
@@ -15,7 +16,12 @@ const normalizedTask = (tasks: TaskResponse[]): TaskResponseDTO[] => {
   })
 }
 
-export const getMyTask = createAsyncThunk<TaskResponseDTO[], void>('tasks/getMyTasks', async () => {
-  const response = await apiInstance.get<TaskResponse[]>('/task')
-  return normalizedTask(response.data)
+export const getMyTask = createAsyncThunk<TaskResponseDTO[], void>('tasks/getMyTasks', async (_, { rejectWithValue } ) => {
+  try {
+    const response = await apiInstance.get<TaskResponse[]>('/task')
+    return normalizedTask(response.data)
+  }
+  catch (error) {
+    return rejectWithValue(errorHandler(error))
+  }
 })

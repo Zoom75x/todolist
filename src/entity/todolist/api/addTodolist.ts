@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { apiInstance } from '../../../shared'
 import { TodolistDTO, TodolistRequest, TodolistResponse } from "../type";
+import { errorHandler } from "../../../shared/api/axiosinstance.ts";
 
 
 const normalizedData = (data: TodolistResponse): TodolistDTO => {
@@ -20,7 +21,7 @@ export const addTodolist = createAsyncThunk<
     const response = await apiInstance.post<TodolistResponse>('todolist', data)
     successCallback?.()
     return normalizedData(response.data)
-  } catch (e) {
-    return thunkApi.rejectWithValue(e)
+  } catch (error) {
+    return thunkApi.rejectWithValue(errorHandler(error))
   }
 })
