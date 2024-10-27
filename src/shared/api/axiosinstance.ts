@@ -1,8 +1,7 @@
 import axios from 'axios'
 import { BASE_URL } from './constant.ts'
 import { ACCESS_TOKEN } from '../constants'
-import { toast } from "react-toastify";
-import error = toast.error;
+import { toast } from 'react-toastify'
 
 export const apiInstance = axios.create({
   baseURL: BASE_URL,

@@ -5,13 +5,13 @@ import { errorHandler, setAuthHeader } from '../../../shared/api/axiosinstance.t
 
 export const authMe = createAsyncThunk<SigInResponce, void>(
   'users/authMe',
-  async (_, { rejectedWithValue }) => {
+  async (_, {rejectWithValue}) => {
     try {
       setAuthHeader()
       const response = await apiInstance.get<SigInResponce>('/users/me')
       return response.data
     } catch (error) {
-      return rejectedWithValue(errorHandler(error))
+      return rejectWithValue(errorHandler(error))
     }
   }
 )

@@ -43,7 +43,7 @@ const todolistSlice = createSlice({
       }).addCase(changeTodolist.pending, (state) => {
       state.isLoading = true
     })
-      .addCase(changeTodolist.fulfilled, (state) => {
+      .addCase(changeTodolist.fulfilled, (state, action) => {
         state.todoLists = unionBy([action.payload,...state.todoLists], "id")
         state.isLoading = false
       })
