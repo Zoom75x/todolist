@@ -9,6 +9,7 @@ import { authMe } from './entity/user/api/autMe.ts'
 import { logOut } from './entity/user/store'
 import { ToastContainer } from './shared';
 import "react-toastify/dist/ReactToastify.css";
+import { Button } from "./shared";
 
 export const App = () => {
   const { name, isAuthentificated, isInitialised } = useSelector(
@@ -46,6 +47,7 @@ export const WrapperApp = () => {
         autoClose={5000}
         closeOnClick
       />
+      <Button type={'default'}>Я кнопка из Ант Д</Button>
     </Provider>
   )
 }

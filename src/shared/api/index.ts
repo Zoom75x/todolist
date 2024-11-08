@@ -1,2 +1,2 @@
 export * from './constant.ts'
-export { apiInstance } from './axiosinstance.ts'
+export { apiInstance, errorHandler } from './axiosinstance.ts'
