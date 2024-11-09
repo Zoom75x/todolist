@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { BaseButton, BaseModalWindow } from '../../../shared'
-import { useAppDispatch } from '../../../app/rootStore'
-import { deleteTodolist } from "../../../entity/todolist/api/deleteTodolist.ts";
+import { BaseButton, BaseModalWindow } from '../../../../shared'
+import { useAppDispatch } from '../../../../app/rootStore'
+import { deleteTodolist } from "../../../../entity/todolist/api/deleteTodolist.ts";
 
 interface PropsType {
   todolistId: string

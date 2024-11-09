@@ -1,53 +1,33 @@
 import './App.module.css'
-import { useEffect } from 'react'
-import { TodoLists } from './todolists'
-import { Login } from './feature/login'
 import { BaseButton } from './shared'
-import { Provider, useSelector } from 'react-redux'
-import { RootState, rootStore, useAppDispatch } from './app/rootStore'
-import { authMe } from './entity/user/api/autMe.ts'
+import { Provider } from 'react-redux'
+import { rootStore, useAppDispatch } from './app/rootStore'
 import { logOut } from './entity/user/store'
-import { ToastContainer } from './shared';
-import "react-toastify/dist/ReactToastify.css";
-import { Button } from "./shared";
+import 'react-toastify/dist/ReactToastify.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { AuthenticateRoute } from "./app/routing";
+import { LoginPage, TodolistsPage } from "./pages";
 
 export const App = () => {
-  const { name, isAuthentificated, isInitialised } = useSelector(
-    (state: RootState) => state.userStore
-  )
   const dispatch = useAppDispatch()
-  console.log(name)
-  useEffect(() => {
-    if (!isAuthentificated) {
-      dispatch(authMe())
-    }
-  }, [])
-  if (!isInitialised) {
-    return <>Loading</>
-  }
-  if (!isAuthentificated) {
-    return <Login />
-  }
-  const onClickLogOut = () => {
-    dispatch(logOut())
-  }
+  const onClickLogOut = () => {dispatch(logOut())}
   return (
     <div>
       <BaseButton onClick={onClickLogOut}>Выйти из профиля</BaseButton>
-      <TodoLists />
     </div>
   )
 }
 export const WrapperApp = () => {
   return (
     <Provider store={rootStore}>
-      <App />
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        closeOnClick
-      />
-      <Button type={'default'}>Я кнопка из Ант Д</Button>
+      <BrowserRouter>
+        <Routes>
+          <Route path={'/login'} element={<LoginPage />} />
+          <Route element={<AuthenticateRoute/>}/>
+          <Route path={'/'} element={<>MainPage</>} />
+          <Route path={'/todolist'} element={<TodolistsPage/>} />
+        </Routes>
+      </BrowserRouter>
     </Provider>
   )
 }

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { sigIn } from '../api'
 import { authMe } from '../api'
 import { ACCESS_TOKEN } from '../../../shared'
+import { setAuthHeader } from "../../../shared/api/axiosinstance.ts";
 
 const userSlice = createSlice({
   name: 'user',
@@ -14,6 +15,7 @@ const userSlice = createSlice({
   reducers: {
     logOut(state) {
       localStorage.removeItem(ACCESS_TOKEN)
+      setAuthHeader()
       state.isAuthentificated = false
     },
   },

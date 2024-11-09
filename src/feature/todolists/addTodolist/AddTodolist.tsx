@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { BaseButton, BaseInput } from '../../shared'
-import { addTodolist } from "../../entity";
-import { RootState, useAppDispatch } from "../../app/rootStore";
+import { BaseButton, BaseInput } from '../../../shared'
+import { addTodolist } from "../../../entity";
+import { RootState, useAppDispatch } from "../../../app/rootStore";
 import { useSelector } from "react-redux";
 
 export const AddTodolist = () => {

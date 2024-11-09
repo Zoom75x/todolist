@@ -11,10 +11,12 @@ export const apiInstance = axios.create({
 
 export const setAuthHeader = () => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN)
-  console.log(ACCESS_TOKEN)
-  if (ACCESS_TOKEN) {
+  if (accessToken) {
     apiInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`
+  } else {
+    apiInstance.defaults.headers.common.Authorization = ''
   }
+  return accessToken
 }
 export const errorHandler =(error:unknown) => {
   if (axios.isAxiosError(error)) {

@@ -1,9 +1,9 @@
 import css from "./TaskList.module.css";
 import { ChangeTitle } from "../changeTitle/ChangeTitle.tsx";
-import { BaseButton, BaseCheckbox } from "../../../shared";
-import { deleteTask, TaskResponseDTO } from "../../../entity";
-import { useAppDispatch } from "../../../app/rootStore";
-import { updateTask } from "../../../entity/task/api/updateTask.ts";
+import { BaseButton, BaseCheckbox } from "../../../../shared";
+import { deleteTask, TaskResponseDTO } from "../../../../entity";
+import { useAppDispatch } from "../../../../app/rootStore";
+import { updateTask } from "../../../../entity/task/api/updateTask.ts";
 
 export interface PropsType {
   filteredTasks: TaskResponseDTO[];

@@ -6,9 +6,9 @@ import { ChangeTitle } from '../changeTitle/ChangeTitle.tsx'
 import css from './TodoList.module.css'
 import { DeleteTdl } from '../deleteTdl/deleteTdl.tsx'
 import { useSelector } from 'react-redux'
-import { RootState, useAppDispatch } from '../../../app/rootStore'
-import { TaskResponseDTO } from '../../../entity'
-import { changeTodolist } from '../../../entity/todolist/api/changeTodolist.ts'
+import { RootState, useAppDispatch } from '../../../../app/rootStore'
+import { TaskResponseDTO } from '../../../../entity'
+import { changeTodolist } from '../../../../entity/todolist/api/changeTodolist.ts'
 
 interface PropsType {
   titleToDoList: string

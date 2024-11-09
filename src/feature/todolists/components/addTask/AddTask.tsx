@@ -1,8 +1,8 @@
 import css from '../tasksList/TaskList.module.css'
 import { ChangeEvent, KeyboardEvent, useState } from 'react'
-import { BaseButton, BaseInput } from '../../../shared'
-import { useAppDispatch } from '../../../app/rootStore'
-import { addTask } from '../../../entity'
+import { BaseButton, BaseInput } from '../../../../shared'
+import { useAppDispatch } from '../../../../app/rootStore'
+import { addTask } from '../../../../entity'
 
 interface PropsType {
   todoListId: string

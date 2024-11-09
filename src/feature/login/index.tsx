@@ -1,17 +1,32 @@
 import { BaseButton, BaseInput } from '../../shared'
 import css from './styles.module.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { sigIn } from '../../entity/user/api/sigIn.ts'
 import { RootState, useAppDispatch } from '../../app/rootStore'
 import { useSelector } from 'react-redux'
+import { Navigate } from 'react-router-dom'
+import { authMe } from '../../entity'
 
 export const Login = () => {
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')
   const dispatch = useAppDispatch()
-  const { isLoading } = useSelector((state: RootState) => state.userStore)
+  const { isLoading, isAuthentificated, isInitialised } = useSelector((state: RootState) => state.userStore)
+
   const onClick = () => {
     if (login && password) dispatch(sigIn({ password, username: login }))
+  }
+  console.log(isAuthentificated)
+  useEffect(() => {
+    if (!isAuthentificated) {
+      dispatch(authMe())
+    }
+  }, [])
+  if (!isInitialised){
+    return <>Loading...</>
+  }
+  if (isAuthentificated) {
+    return <Navigate to={'/todolist'} />
   }
   return (
     <div className={css.container}>
